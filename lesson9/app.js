@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const expressFileUpload = require('express-fileupload');
 const { statusErr: { NOT_FOUND }, messageError: { notFound } } = require('./errors');
 require('dotenv').config();
 
@@ -11,6 +12,7 @@ mongoose.connect(dataBasePost, { useNewUrlParser: true, useUnifiedTopology: true
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(expressFileUpload());
 
 const { userRouter, carRouter, loginRouter } = require('./routes');
 
