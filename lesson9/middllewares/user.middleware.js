@@ -1,9 +1,10 @@
-const { statusErr: { BAD_REQUEST } } = require('../errors');
 const { loginValidator } = require('../validators');
 const { USER } = require('../dataBase');
-const { ErrorHandler } = require('../errors');
-const { statusErr: { FORBIDDEN, NOT_FOUND, CONFLICT } } = require('../errors');
 const {
+    statusErr: {
+        FORBIDDEN, NOT_FOUND, CONFLICT, BAD_REQUEST
+    },
+    ErrorHandler,
     messageError: {
         notFound, alreadyExist, forbidden, idFalse
     }

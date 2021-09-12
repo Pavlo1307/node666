@@ -1,10 +1,9 @@
-const { emailService } = require('../service');
-const { emailActionsEnum, actionTokensEnum, variables: { FrontendURL } } = require('../config');
-const { passwordService } = require('../service');
-const { jwtService } = require('../service');
+const { emailService, passwordService, jwtService } = require('../service');
+const {
+    emailActionsEnum, actionTokensEnum, variables: { FrontendURL }, constants: { authorization }
+} = require('../config');
 const { userUtil: { userNormalizator } } = require('../utils');
 const { Login, ActionTokens, USER } = require('../dataBase');
-const { constants: { authorization } } = require('../config');
 
 module.exports = {
 
@@ -65,7 +64,7 @@ module.exports = {
 
             await ActionTokens.create({ token: actionToken, user: user._id });
 
-            await emailService.sendMail('pavloshavel@gmail.com',
+            await emailService.sendMail(user.email,
                 emailActionsEnum.FORGOT_PASSWORD, {
                     userName: user.name,
                     forgotPasswordURL: `${FrontendURL}/password?token=${actionToken}`
@@ -90,7 +89,7 @@ module.exports = {
 
             await USER.findByIdAndUpdate(_id, { password: hashPassword });
 
-            await Login.deleteOne({ user: _id });
+            await Login.deleteMany({ user: _id });
 
             res.json('Ok');
         } catch (e) {

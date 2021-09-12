@@ -1,6 +1,5 @@
 const router = require('express').Router();
 
-const { validatorMiddleware: { validateBody } } = require('../middllewares');
 const {
     userMiddleware: {
         getUserByDynamicParam,
@@ -8,16 +7,17 @@ const {
         isUserNotPresent,
         isUserPresent,
         CheckUserForUpdate
-    }
+    },
+    validatorMiddleware: { validateBody },
+    loginMiddleware: { validateToken }
 } = require('../middllewares');
 const { userController } = require('../controlles');
-const { userRoles: { USER, ADMIN } } = require('../config');
 const { userValidator: { createUserValidator, updateUser } } = require('../validators');
-const { loginMiddleware: { validateToken } } = require('../middllewares');
 const {
     constants: {
         email, body, user_id, params, id
-    }
+    },
+    userRoles: { USER }
 } = require('../config');
 
 router.post('/',

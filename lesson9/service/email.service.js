@@ -4,8 +4,7 @@ const path = require('path');
 const EmailTemplates = require('email-templates');
 const allTemplates = require('../email-templates');
 const { ErrorHandler } = require('../errors');
-const { variables: { noReplyEmail, noReplyPassword } } = require('../config');
-const { variables: { FrontendURL } } = require('../config');
+const { variables: { noReplyEmail, noReplyPassword, FrontendURL } } = require('../config');
 
 const templateParser = new EmailTemplates({
     views: {

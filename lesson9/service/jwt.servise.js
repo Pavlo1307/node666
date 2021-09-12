@@ -1,10 +1,9 @@
 const jwt = require('jsonwebtoken');
 const util = require('util');
-const { actionTokensEnum } = require('../config');
-const { access } = require('../config/constans');
-const { messageError: { InvalidToken, wrongTokenType } } = require('../errors');
-const { ErrorHandler } = require('../errors');
-const { statusErr: { Unauthorized, SERVER_ERROR } } = require('../errors');
+const {
+    messageError: { InvalidToken, wrongTokenType },
+    ErrorHandler, statusErr: { Unauthorized, SERVER_ERROR }
+} = require('../errors');
 const {
     variables:
     {
@@ -12,7 +11,9 @@ const {
         REFRESH_SECRET_KEY,
         FORGOT_PASSWORD_SECRET_KEY,
         ACTIVE_SECRET_KEY
-    }
+    },
+    actionTokensEnum,
+    constants: { access }
 } = require('../config');
 
 const verifyPromise = util.promisify(jwt.verify);

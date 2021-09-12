@@ -1,12 +1,7 @@
-const { ActionTokens } = require('../dataBase');
-const { Login } = require('../dataBase');
-const { jwtService: { varifyToken, verifyActionToken } } = require('../service');
-const { statusErr: { Unauthorized } } = require('../errors');
-const { messageError: { noToken, InvalidToken } } = require('../errors');
-const { ErrorHandler } = require('../errors');
-const { constants: { access } } = require('../config');
-const { constants: { authorization } } = require('../config');
-const { passwordService } = require('../service');
+const { ActionTokens, Login, USER } = require('../dataBase');
+const { jwtService: { varifyToken, verifyActionToken }, passwordService } = require('../service');
+const { statusErr: { Unauthorized }, messageError: { noToken, InvalidToken }, ErrorHandler } = require('../errors');
+const { constants: { access, authorization } } = require('../config');
 
 module.exports = {
     validateToken: (typeToken = access) => async (req, res, next) => {
@@ -41,7 +36,7 @@ module.exports = {
 
             await verifyActionToken(actionToken, tokenType);
 
-            const tokenFromDB = await ActionTokens.findOne({ token: actionToken });
+            const tokenFromDB = await ActionTokens.findOne({ token: actionToken }).populate(USER);
 
             if (!tokenFromDB) {
                 throw new ErrorHandler(Unauthorized, InvalidToken);

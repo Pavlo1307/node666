@@ -1,7 +1,6 @@
 const router = require('express').Router();
 
-const { validatorMiddleware: { validateBody } } = require('../middllewares');
-const { carMiddleware } = require('../middllewares');
+const { validatorMiddleware: { validateBody }, carMiddleware } = require('../middllewares');
 const { carController } = require('../controlles');
 const { carValidator: { createCarValidator, updateCarValidator } } = require('../validators');
 

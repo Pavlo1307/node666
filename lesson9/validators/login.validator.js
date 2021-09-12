@@ -17,8 +17,13 @@ const changePasswordValidator = Joi.object({
     password: passwordSchema
 });
 
+const emailValidator = Joi.object({
+    email: Joi.string().regex(constants.EMAIL_REGEXP).trim().required()
+});
+
 module.exports = {
     authValidator,
     passwordValidator,
-    changePasswordValidator
+    changePasswordValidator,
+    emailValidator
 };

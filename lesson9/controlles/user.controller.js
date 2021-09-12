@@ -1,11 +1,9 @@
 const { USER } = require('../dataBase');
 const { emailActionsEnum } = require('../config');
 
-const { ErrorHandler } = require('../errors');
 const { passwordService, emailService } = require('../service');
-const { statusErr: { NO_CONTENT, CREATED, NOT_FOUND } } = require('../errors');
+const { statusErr: { NO_CONTENT, CREATED } } = require('../errors');
 const { userUtil: { userNormalizator } } = require('../utils');
-const { messageError: { notFound, deleted } } = require('../errors');
 
 module.exports = {
     getSingleUser: async (req, res, next) => {
