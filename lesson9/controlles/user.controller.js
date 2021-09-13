@@ -2,6 +2,7 @@ const { USER } = require('../dataBase');
 const { emailActionsEnum } = require('../config');
 
 const { passwordService, emailService } = require('../service');
+const { s3Service } = require('../service');
 const { statusErr: { NO_CONTENT, CREATED } } = require('../errors');
 const { userUtil: { userNormalizator } } = require('../utils');
 
@@ -32,10 +33,20 @@ module.exports = {
         try {
             const { password, email } = req.body;
             const hashedPassword = await passwordService.hash(password);
-            const createdUser = await USER.create({ ...req.body, password: hashedPassword });
-            const userToReturn = userNormalizator(createdUser);
 
-            await emailService.sendMail(email, emailActionsEnum.CREATE);
+            // await emailService.sendMail(email, emailActionsEnum.CREATE);
+
+            let createdUser = await USER.create({ ...req.body, password: hashedPassword });
+
+            if (req.files && req.files.avatar) {
+                const s3Response = await s3Service.uploadFile(req.files.avatar, 'users', createdUser._id);
+                createdUser = await USER.findByIdAndUpdate(
+                    createdUser._id,
+                    { avatar: s3Response.Location },
+                    { new: true }
+                );
+            }
+            const userToReturn = userNormalizator(createdUser);
 
             res.status(CREATED).json(userToReturn);
         } catch (e) {

@@ -9,7 +9,8 @@ const {
         CheckUserForUpdate
     },
     validatorMiddleware: { validateBody },
-    loginMiddleware: { validateToken }
+    loginMiddleware: { validateToken },
+    fileMiddleware:{ cheackAvatar }
 } = require('../middllewares');
 const { userController } = require('../controlles');
 const { userValidator: { createUserValidator, updateUser } } = require('../validators');
@@ -22,6 +23,7 @@ const {
 
 router.post('/',
     validateBody(createUserValidator),
+    cheackAvatar,
     getUserByDynamicParam(email, body),
     isUserPresent,
     userController.createUser);

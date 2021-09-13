@@ -8,5 +8,6 @@ module.exports = {
     noToken: 'no token',
     forbidden: 'Forbidden',
     idFalse: 'id is false',
-    wrongTokenType: 'Wrong token type'
+    wrongTokenType: 'Wrong token type',
+    wrongTypeFormat: 'Wrong type format'
 };

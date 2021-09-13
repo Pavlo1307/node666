@@ -9,5 +9,13 @@ module.exports = {
     id: '_id',
     access: 'access_token',
     refresh: 'refresh_token',
+    PHOTO_MAX_SIZE: 5 * 1024 * 1024,
+    NIME_TYPES: {
+        PHOTO: [
+            'image/jpeg',
+            'image/png'
+        ],
+    }
+
 
 };

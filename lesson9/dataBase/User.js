@@ -33,6 +33,11 @@ const userSchema = new Schema({
         required: true,
         default: false,
     },
+
+    avatar: {
+       type: String
+    },
+
 }, { timestamps: true });
 
 module.exports = model(user, userSchema);
