@@ -80,7 +80,16 @@ module.exports = {
         try {
             const { user_id } = req.params;
             const { email, name } = req.body;
-            const user = await USER.updateOne({ _id: user_id }, req.body);
+            let user = await USER.updateOne({ _id: user_id }, req.body, { new: true });
+
+            if (req.files && req.files.avatar) {
+                const s3Response = await s3Service.uploadFile(req.files.avatar, 'users', { _id: user_id });
+                user = await USER.findByIdAndUpdate(
+                    { _id: user_id },
+                    { avatar: s3Response.Location },
+                    { new: true }
+                );
+            }
 
             await emailService.sendMail(email, emailActionsEnum.UPDATE, { userName: name });
 
