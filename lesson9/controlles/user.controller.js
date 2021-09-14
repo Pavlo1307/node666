@@ -34,9 +34,10 @@ module.exports = {
         try {
             const { password, email } = req.body;
             const hashedPassword = await passwordService.hash(password);
-            const actionToken = jwtService.generateActionToken(actionTokensEnum.ACTIVE_USER);
 
-            // await emailService.sendMail(email, emailActionsEnum.CREATE);
+            const actionToken = roleUser === 'admin'
+                ? jwtService.generateActionToken(actionTokensEnum.CHANGE_ADMIN_PASSWORD)
+                : jwtService.generateActionToken(actionTokensEnum.ACTIVE_USER);
 
             let createdUser = await USER.create({ ...req.body, password: hashedPassword, role: roleUser });
 
