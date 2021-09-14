@@ -39,7 +39,9 @@ module.exports = {
             let createdUser = await USER.create({ ...req.body, password: hashedPassword });
 
             if (req.files && req.files.avatar) {
-                const s3Response = await s3Service.uploadFile(req.files.avatar, 'users', createdUser._id);
+                const s3Response = await s3Service.uploadFile(req.files.avatar,
+                    'users',
+                    createdUser._id);
                 createdUser = await USER.findByIdAndUpdate(
                     createdUser._id,
                     { avatar: s3Response.Location },
@@ -57,7 +59,7 @@ module.exports = {
     deleteUser: async (req, res, next) => {
         try {
             const { user_id, } = req.params;
-            const { isUser, user: { email } } = req;
+            const { isUser, user: { email }, user } = req;
 
             await USER.deleteOne({ _id: user_id });
 
@@ -70,6 +72,10 @@ module.exports = {
 
             await emailService.sendMail(email, emailActionsEnum.DELETE);
 
+            if (user.avatar) {
+                await s3Service.deleteFile(user.avatar);
+            }
+
             res.sendStatus(NO_CONTENT);
         } catch (e) {
             next(e);
@@ -78,20 +84,28 @@ module.exports = {
 
     updateUser: async (req, res, next) => {
         try {
-            const { user_id } = req.params;
+            let { user } = req;
             const { email, name } = req.body;
-            let user = await USER.updateOne({ _id: user_id }, req.body, { new: true });
 
             if (req.files && req.files.avatar) {
-                const s3Response = await s3Service.uploadFile(req.files.avatar, 'users', { _id: user_id });
+                if (user.avatar) {
+                    await s3Service.deleteFile(user.avatar);
+                }
+
+                const s3Response = await s3Service.uploadFile(req.files.avatar,
+                    'users',
+                    user._id);
+
                 user = await USER.findByIdAndUpdate(
-                    { _id: user_id },
-                    { avatar: s3Response.Location },
+                    user._id,
+                    { ...req.body, avatar: s3Response.Location },
                     { new: true }
                 );
+            } else {
+                user = await USER.findByIdAndUpdate(user._id, req.body);
             }
 
-            await emailService.sendMail(email, emailActionsEnum.UPDATE, { userName: name });
+            // await emailService.sendMail(email, emailActionsEnum.UPDATE, { userName: name });
 
             res.status(CREATED).json(user);
         } catch (e) {

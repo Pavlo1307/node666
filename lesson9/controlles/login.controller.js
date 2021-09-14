@@ -17,7 +17,7 @@ module.exports = {
 
             await Login.create({ ...tokenPair, user: user._id });
 
-            await emailService.sendMail(email, emailActionsEnum.LOGIN);
+            // await emailService.sendMail(email, emailActionsEnum.LOGIN);
 
             res.json({
                 ...tokenPair,

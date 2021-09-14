@@ -2,6 +2,8 @@ const S3 = require('aws-sdk/clients/s3');
 const path = require('path');
 const uuid = require('uuid').v1;
 
+const { constants: { AMAZONAWS } } = require('../config');
+
 const {
     variables: {
         AWS_S3_SECRET_KEY,
@@ -31,6 +33,15 @@ module.exports = {
                 ContentType: mimetype
             })
             .promise();
+    },
+
+    deleteFile: (location) => {
+        const Key = location.split(AMAZONAWS)[1];
+
+        return bucket.deleteObject({
+            Bucket: AWS_S3_NAME,
+            Key,
+        }).promise();
     }
 };
 
