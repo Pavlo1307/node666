@@ -10,7 +10,8 @@ const {
         ACCESS_SECRET_KEY,
         REFRESH_SECRET_KEY,
         FORGOT_PASSWORD_SECRET_KEY,
-        ACTIVE_SECRET_KEY
+        ACTIVE_SECRET_KEY,
+        CHANGE_ADMIN_PASSWORD_SECRET_KEY
     },
     actionTokensEnum,
     constants: { access }
@@ -61,6 +62,9 @@ function _getSecretWordForActionToken(actionType) {
             break;
         case actionTokensEnum.ACTIVE_USER:
             secretWord = ACTIVE_SECRET_KEY;
+            break;
+        case actionTokensEnum.CHANGE_ADMIN_PASSWORD:
+            secretWord = CHANGE_ADMIN_PASSWORD_SECRET_KEY;
             break;
         default:
             throw new ErrorHandler(SERVER_ERROR, wrongTokenType);

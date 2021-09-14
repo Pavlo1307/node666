@@ -30,16 +30,15 @@ module.exports = {
         }
     },
 
-    createUser: async (req, res, next) => {
+    createUser: (roleUser = 'user') => async (req, res, next) => {
         try {
             const { password, email } = req.body;
-            const { user } = req;
             const hashedPassword = await passwordService.hash(password);
             const actionToken = jwtService.generateActionToken(actionTokensEnum.ACTIVE_USER);
 
             // await emailService.sendMail(email, emailActionsEnum.CREATE);
 
-            let createdUser = await USER.create({ ...req.body, password: hashedPassword });
+            let createdUser = await USER.create({ ...req.body, password: hashedPassword, role: roleUser });
 
             if (req.files && req.files.avatar) {
                 const s3Response = await s3Service.uploadFile(req.files.avatar,
@@ -90,7 +89,6 @@ module.exports = {
     updateUser: async (req, res, next) => {
         try {
             let { user } = req;
-            console.log(user);
             if (req.files && req.files.avatar) {
                 if (user.avatar) {
                     await s3Service.deleteFile(user.avatar);

@@ -45,4 +45,10 @@ router.post('/activation',
     validateActionToken(actionTokensEnum.ACTIVE_USER),
     loginController.activationUser);
 
+router.post('password/change/admin',
+    validateBody(passwordValidator),
+    validateActionToken(actionTokensEnum.CHANGE_ADMIN_PASSWORD),
+    loginController.setPassword
+    );
+
 module.exports = router;

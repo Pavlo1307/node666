@@ -1,3 +1,4 @@
+const { statusErr: { CREATED } } = require('../errors');
 const { emailService, passwordService, jwtService } = require('../service');
 const {
     emailActionsEnum, actionTokensEnum, variables: { FrontendURL }, constants: { authorization }
@@ -110,5 +111,22 @@ module.exports = {
             next(e);
         }
     },
+
+    setPassword: async (req, res, next) => {
+        try {
+            const { body: { password }, loginUser: { _id } } = req;
+            const getToken = req.get(authorization);
+
+            const hashedPassword = await passwordService.hash(password);
+
+            await USER.findByIdAndUpdate({ _id }, { password: hashedPassword, isActivated: true });
+
+            await ActionTokens.deleteOne({ token: getToken });
+
+            res.sendStatus(CREATED);
+        } catch (e) {
+            next(e);
+        }
+    }
 
 };

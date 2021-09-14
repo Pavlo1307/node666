@@ -18,7 +18,7 @@ const {
     constants: {
         email, body, user_id, params, id
     },
-    userRoles: { USER }
+    userRoles: { USER, ADMIN }
 } = require('../config');
 
 router.post('/',
@@ -26,7 +26,7 @@ router.post('/',
     cheackAvatar,
     getUserByDynamicParam(email, body),
     isUserPresent,
-    userController.createUser);
+    userController.createUser());
 
 router.get('/', userController.getAllUsers);
 
@@ -48,5 +48,13 @@ router.put('/:user_id',
     getUserByDynamicParam(user_id),
     CheckUserForUpdate,
     userController.updateUser);
+
+router.post('/create/admin',
+    validateBody(createUserValidator),
+    cheackAvatar,
+    isUserPresent,
+    validateToken(),
+    checkUserRoleMiddleware([ADMIN]),
+    userController.createUser(ADMIN));
 
 module.exports = router;
