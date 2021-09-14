@@ -48,7 +48,6 @@ router.post('/activation',
 router.post('/password/change/admin',
     validateBody(passwordValidator),
     validateActionToken(actionTokensEnum.CHANGE_ADMIN_PASSWORD),
-    loginController.setPassword
-    );
+    loginController.setPassword);
 
 module.exports = router;
