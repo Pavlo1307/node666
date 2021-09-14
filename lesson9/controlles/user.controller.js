@@ -1,7 +1,8 @@
+const { ActionTokens } = require('../dataBase');
 const { USER } = require('../dataBase');
-const { emailActionsEnum } = require('../config');
+const { emailActionsEnum, actionTokensEnum } = require('../config');
 
-const { passwordService, emailService } = require('../service');
+const { passwordService, emailService, jwtService } = require('../service');
 const { s3Service } = require('../service');
 const { statusErr: { NO_CONTENT, CREATED } } = require('../errors');
 const { userUtil: { userNormalizator } } = require('../utils');
@@ -11,7 +12,7 @@ module.exports = {
         try {
             const userToReturn = userNormalizator(req.user);
 
-            await emailService.sendMail('pavloshavel@gmail.com', emailActionsEnum.WELCOME);
+            await emailService.sendMail(req.user.email, emailActionsEnum.WELCOME);
 
             res.json(userToReturn);
         } catch (e) {
@@ -32,7 +33,9 @@ module.exports = {
     createUser: async (req, res, next) => {
         try {
             const { password, email } = req.body;
+            const { user } = req;
             const hashedPassword = await passwordService.hash(password);
+            const actionToken = jwtService.generateActionToken(actionTokensEnum.ACTIVE_USER);
 
             // await emailService.sendMail(email, emailActionsEnum.CREATE);
 
@@ -50,7 +53,9 @@ module.exports = {
             }
             const userToReturn = userNormalizator(createdUser);
 
-            res.status(CREATED).json(userToReturn);
+            await ActionTokens.create({ token: actionToken, user: createdUser._id });
+
+            res.status(CREATED).json({ ...userToReturn, action_token: actionToken });
         } catch (e) {
             next(e);
         }
@@ -59,7 +64,7 @@ module.exports = {
     deleteUser: async (req, res, next) => {
         try {
             const { user_id, } = req.params;
-            const { isUser, user: { email }, user } = req;
+            const { isUser, user: { email, avatar } } = req;
 
             await USER.deleteOne({ _id: user_id });
 
@@ -72,8 +77,8 @@ module.exports = {
 
             await emailService.sendMail(email, emailActionsEnum.DELETE);
 
-            if (user.avatar) {
-                await s3Service.deleteFile(user.avatar);
+            if (avatar) {
+                await s3Service.deleteFile(avatar);
             }
 
             res.sendStatus(NO_CONTENT);
@@ -85,8 +90,7 @@ module.exports = {
     updateUser: async (req, res, next) => {
         try {
             let { user } = req;
-            const { email, name } = req.body;
-
+            console.log(user);
             if (req.files && req.files.avatar) {
                 if (user.avatar) {
                     await s3Service.deleteFile(user.avatar);
@@ -105,7 +109,7 @@ module.exports = {
                 user = await USER.findByIdAndUpdate(user._id, req.body);
             }
 
-            // await emailService.sendMail(email, emailActionsEnum.UPDATE, { userName: name });
+            // await emailService.sendMail(user.email, emailActionsEnum.UPDATE, { userName: user.name });
 
             res.status(CREATED).json(user);
         } catch (e) {

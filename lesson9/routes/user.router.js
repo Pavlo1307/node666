@@ -10,7 +10,7 @@ const {
     },
     validatorMiddleware: { validateBody },
     loginMiddleware: { validateToken },
-    fileMiddleware:{ cheackAvatar }
+    fileMiddleware: { cheackAvatar }
 } = require('../middllewares');
 const { userController } = require('../controlles');
 const { userValidator: { createUserValidator, updateUser } } = require('../validators');

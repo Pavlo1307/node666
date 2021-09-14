@@ -36,7 +36,7 @@ module.exports = {
 
             await verifyActionToken(actionToken, tokenType);
 
-            const tokenFromDB = await ActionTokens.findOne({ token: actionToken }).populate(USER);
+            const tokenFromDB = await ActionTokens.findOne({ token: actionToken }).populate('user');
 
             if (!tokenFromDB) {
                 throw new ErrorHandler(Unauthorized, InvalidToken);
