@@ -10,12 +10,12 @@ const { Login } = require('../dataBase');
 module.exports = async () => {
     const tenDays = datJs.utc().subtract(10, 'day');
 
-    const users = await Login.find({ createdAt: { $lte: tenDays } }).populate(user);
-
-    const promiseUsers = users.map(async (item) => {
+    const users = await Login.find({ createdAt: { $lt: tenDays } }).populate(user);
+    console.log(users);
+    await Promise.allSettled(users.map(async (item) => {
         await emailService.sendMail('pavloshavel@gmail.com',
             emailActionsEnum.COME_BECK,
-            { userName: item.name });
-    });
-    await Promise.allSettled(promiseUsers);
+            { userName: item.user.name });
+    }));
+    console.log('ddddd');
 };

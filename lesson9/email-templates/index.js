@@ -37,7 +37,7 @@ module.exports = {
     },
 
     [emailActionsEnum.COME_BECK]: {
-        templateName: 'come_back',
+        templateName: 'comeBack',
         subject: 'Come_back'
     },
 };

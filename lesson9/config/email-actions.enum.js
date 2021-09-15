@@ -6,6 +6,6 @@ module.exports = {
     UPDATE: 'update',
     DELETE_ADMIN: 'deleteAdmin',
     FORGOT_PASSWORD: 'forgot_password',
-    COME_BECK: 'come_beak'
+    COME_BECK: 'comeBeak'
 
 };

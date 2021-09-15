@@ -107,7 +107,6 @@ module.exports = {
             } else {
                 user = await USER.findByIdAndUpdate(user._id, req.body);
             }
-
             // await emailService.sendMail(user.email, emailActionsEnum.UPDATE, { userName: user.name });
 
             res.status(CREATED).json(user);

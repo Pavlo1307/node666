@@ -11,7 +11,7 @@ module.exports = {
     FrontendURL: 'https://google.com',
 
     noReplyEmail: process.env.noReplyEmail || 'pavloshavel@gmail.com',
-    noReplyPassword: process.env.noReplyPassword || '',
+    noReplyPassword: process.env.noReplyPassword || '0000',
 
     AWS_S3_NAME: process.env.AWS_S3_NAME || '',
     AWS_S3_REGION: process.env.AWS_S3_REGION || '',
