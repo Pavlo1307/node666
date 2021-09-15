@@ -11,9 +11,9 @@ module.exports = async () => {
     const tenDays = datJs.utc().subtract(10, 'day');
 
     const users = await Login.find({ createdAt: { $lt: tenDays } }).populate(user);
-    console.log(users);
+
     await Promise.allSettled(users.map(async (item) => {
-        await emailService.sendMail('pavloshavel@gmail.com',
+        await emailService.sendMail(item.user.email,
             emailActionsEnum.COME_BECK,
             { userName: item.user.name });
     }));
