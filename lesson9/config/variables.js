@@ -13,9 +13,10 @@ module.exports = {
     noReplyEmail: process.env.noReplyEmail || 'pavloshavel@gmail.com',
     noReplyPassword: process.env.noReplyPassword || '',
 
-    AWS_S3_NAME: '',
-    AWS_S3_REGION: '',
-    AWS_S3_ACCESS_KEY: '',
-    AWS_S3_SECRET_KEY: '',
+    AWS_S3_NAME: process.env.AWS_S3_NAME || '',
+    AWS_S3_REGION: process.env.AWS_S3_REGION || '',
+    AWS_S3_ACCESS_KEY: process.env.AWS_S3_ACCESS_KEY || '',
+    AWS_S3_SECRET_KEY: process.env.AWS_S3_SECRET_KEY || '',
+    ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS || 'http://localhost:3000',
 
 };

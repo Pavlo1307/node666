@@ -1,18 +1,37 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+const cors = require('cors');
 const expressFileUpload = require('express-fileupload');
-const { statusErr: { NOT_FOUND }, messageError: { notFound } } = require('./errors');
-require('dotenv').config();
+const expressRateLimit = require('express-rate-limit');
 
-const { variables: { PORT, dataBasePost } } = require('./config');
+require('dotenv').config();
+const { statusErr: { NOT_FOUND }, messageError: { notFound }, ErrorHandler } = require('./errors');
+const cronJobs = require('./cron');
+const { variables: { PORT, dataBasePost, ALLOWED_ORIGINS } } = require('./config');
 
 const app = express();
 
 mongoose.connect(dataBasePost, { useNewUrlParser: true, useUnifiedTopology: true });
 
+app.use(helmet());
+
+app.use(cors({ origin: _configureCors }));
+
+app.use(expressRateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 1000
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(expressFileUpload());
+
+if (process.env.NODE_ENV === 'dev') {
+    // eslint-disable-next-line import/no-extraneous-dependencies,no-shadow
+    const morgan = require('morgan');
+    app.use(morgan('dev'));
+}
 
 const { userRouter, carRouter, loginRouter } = require('./routes');
 
@@ -28,6 +47,7 @@ app.use(_mainErrorHandler);
 
 app.listen(PORT, () => {
     console.log('App listen', PORT);
+    cronJobs();
 });
 
 function _notFoundError(err, req, res, next) {
@@ -44,4 +64,18 @@ function _mainErrorHandler(err, req, res, next) {
         .json({
             message: err.message
         });
+}
+
+function _configureCors(origin, callback) {
+    const whitelist = ALLOWED_ORIGINS.split(';');
+
+    if (!origin && process.env.NODE_ENV === 'dev') {
+        return callback(null, true);
+    }
+
+    if (!whitelist.includes(origin)) {
+        return callback(new ErrorHandler(403, 'CORS not allowed'), false);
+    }
+
+    return callback(null, true);
 }
