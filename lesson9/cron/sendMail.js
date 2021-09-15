@@ -17,5 +17,4 @@ module.exports = async () => {
             emailActionsEnum.COME_BECK,
             { userName: item.user.name });
     }));
-    console.log('ddddd');
 };

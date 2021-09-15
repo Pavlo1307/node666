@@ -7,7 +7,7 @@ module.exports = () => {
         await removeOltToken();
     });
 
-    cron.schedule('*/2 * * * *', async () => {
+    cron.schedule(' 30 6 * * 1,3,5 ', async () => {
         await sendMail();
     });
 };
