@@ -1,10 +1,13 @@
 const cron = require('node-cron');
 const removeOltToken = require('./removeOldTokens');
+const sendMail = require('./sendMail');
 
 module.exports = () => {
     cron.schedule(' 0 0 1 * *', async () => {
-        console.log(`cron started at ${new Date().toISOString()} `);
         await removeOltToken();
-        console.log(`cron finished at ${new Date().toISOString()} `);
+    });
+
+    cron.schedule(' 30 6 * * 1,3,5 ', async () => {
+        await sendMail();
     });
 };

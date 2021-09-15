@@ -35,4 +35,9 @@ module.exports = {
         templateName: 'forgot_password',
         subject: 'Forgot_password'
     },
+
+    [emailActionsEnum.COME_BECK]: {
+        templateName: 'come_back',
+        subject: 'Come_back'
+    },
 };
