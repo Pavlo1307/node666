@@ -48,6 +48,7 @@ app.use(_mainErrorHandler);
 app.listen(PORT, () => {
     console.log('App listen', PORT);
     cronJobs();
+    require('./utils/defaulData.util');
 });
 
 function _notFoundError(err, req, res, next) {
