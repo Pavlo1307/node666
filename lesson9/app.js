@@ -4,10 +4,13 @@ const helmet = require('helmet');
 const cors = require('cors');
 const expressFileUpload = require('express-fileupload');
 const expressRateLimit = require('express-rate-limit');
+const swaggerUI = require('swagger-ui-express');
+const { userRouter, carRouter, loginRouter } = require('./routes');
 
 require('dotenv').config();
 const { statusErr: { NOT_FOUND }, messageError: { notFound }, ErrorHandler } = require('./errors');
 const cronJobs = require('./cron');
+const swaggerJson = require('./docs/swagger.json');
 const { variables: { PORT, dataBasePost, ALLOWED_ORIGINS } } = require('./config');
 
 const app = express();
@@ -33,12 +36,11 @@ if (process.env.NODE_ENV === 'dev') {
     app.use(morgan('dev'));
 }
 
-const { userRouter, carRouter, loginRouter } = require('./routes');
-
 app.get('/', ((req, res) => {
     res.status(NOT_FOUND).end(notFound);
 }));
 
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerJson));
 app.use('/login', loginRouter);
 app.use('/users', userRouter);
 app.use('/cars', carRouter);

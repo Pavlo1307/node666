@@ -1,0 +1,424 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "My first swagger",
+    "version": "0.0.1",
+    "description": "My first swagger description ",
+    "contact": {
+      "name": "Petro"
+    }
+  },
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "getAllUsers",
+        "description": "Get all user",
+        "parameters": [
+          {
+            "name": "perPage",
+            "in": "query",
+            "default": 10,
+            "type": "number",
+            "required": false,
+            "description": "How many users will be returned"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All users info arr",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/singleUser"
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "description": "Create user",
+        "operationId": "createUser",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "formData",
+            "type": "string",
+            "required": true,
+            "default": "Petro",
+            "description": "User name"
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "type": "string",
+            "required": true,
+            "default": "petro@example.com",
+            "description": "User email"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "type": "string",
+            "required": true,
+            "default": "9999sdsd",
+            "description": "Password"
+          },
+          {
+            "name": "avatar",
+            "in": "formData",
+            "type": "file",
+            "description": "Avatar"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "default": "access_token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was created",
+            "schema": {
+              "$ref": "#/definitions/singleUser"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "users/id"
+        ],
+        "description": "Update user",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "type": "string",
+            "default": "Petro",
+            "description": "User name"
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "type": "string",
+            "default": "petro@example.com",
+            "description": "User email"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "type": "string",
+            "default": "9999sdsd",
+            "description": "Password"
+          },
+          {
+            "name": "avatar",
+            "in": "formData",
+            "type": "file",
+            "description": "Avatar"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "default": "access_token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was updated",
+            "schema": {
+              "$ref": "#/definitions/singleUser"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "users/id"
+        ],
+        "description": "Delete user",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "default": "access_token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was delete",
+            "schema": {
+              "$ref": "#/definitions/singleUser"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      }
+    },
+    "/cars": {
+      "get": {
+        "tags": [
+          "cars"
+        ],
+        "operationId": "getAllCars",
+        "description": "Get all cars",
+        "parameters": [
+          {
+            "name": "perPage",
+            "in": "query",
+            "default": 10,
+            "type": "number",
+            "required": false,
+            "description": "How many cars will be returned"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All cars info arr",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/car"
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "cars"
+        ],
+        "description": "Create cars",
+        "operationId": "createCar",
+        "parameters": [
+          {
+            "name": "model",
+            "in": "formData",
+            "type": "string",
+            "required": true,
+            "default": "bmw",
+            "description": "Model name"
+          },
+          {
+            "name": "year",
+            "in": "formData",
+            "type": "number",
+            "required": true,
+            "default": 2010,
+            "description": "car year"
+          },
+          {
+            "name": "price",
+            "in": "formData",
+            "type": "number",
+            "required": true,
+            "default": 2000,
+            "description": "price"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was created",
+            "schema": {
+              "$ref": "#/definitions/singleUser"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "cars/id"
+        ],
+        "description": "Update car",
+        "operationId": "carUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "model",
+            "in": "formData",
+            "type": "string",
+            "required": false,
+            "default": "bmw",
+            "description": "Model name"
+          },
+          {
+            "name": "year",
+            "in": "formData",
+            "type": "number",
+            "required": false,
+            "default": 2010,
+            "description": "car year"
+          },
+          {
+            "name": "price",
+            "in": "formData",
+            "type": "number",
+            "required": false,
+            "default": 2000,
+            "description": "price"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Car was updated",
+            "schema": {
+              "$ref": "#/definitions/car"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "cars/id"
+        ],
+        "description": "Delete car",
+        "operationId": "carUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "default": "access_token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was delete",
+            "schema": {
+              "$ref": "#/definitions/singleUser"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "definitions": {
+    "errorSchema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Error message",
+          "example": "Error"
+        },
+        "code": {
+          "description": "custom code",
+          "example": 228,
+          "type": "number"
+        }
+      }
+    },
+    "singleUser": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "445sd5sds5"
+        },
+        "email": {
+          "type": "string",
+          "example": "petro@example.com"
+        }
+      }
+    },
+    "car": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "4684s5dfs"
+        },
+        "model": {
+          "type": "string",
+          "example": "bmw"
+        }
+      }
+    }
+  }
+}
