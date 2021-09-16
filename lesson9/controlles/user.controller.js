@@ -2,7 +2,12 @@ const { ActionTokens } = require('../dataBase');
 const { USER } = require('../dataBase');
 const { emailActionsEnum, actionTokensEnum } = require('../config');
 
-const { passwordService, emailService, jwtService } = require('../service');
+const {
+    passwordService,
+    emailService,
+    jwtService,
+    userService
+} = require('../service');
 const { s3Service } = require('../service');
 const { statusErr: { NO_CONTENT, CREATED } } = require('../errors');
 const { userUtil: { userNormalizator } } = require('../utils');
@@ -22,7 +27,7 @@ module.exports = {
 
     getAllUsers: async (req, res, next) => {
         try {
-            const allUser = await USER.find({});
+            const allUser = await userService.getAll(req.query);
             const allUserToReturn = allUser.map((value) => userNormalizator(value));
             res.json(allUserToReturn);
         } catch (e) {
