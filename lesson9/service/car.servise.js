@@ -1,4 +1,4 @@
-const { USER } = require('../dataBase');
+const { CAR } = require('../dataBase');
 
 module.exports = {
     getAll: async (query) => {
@@ -17,23 +17,16 @@ module.exports = {
 
         Object.keys(filters).forEach((filterParam) => {
             switch (filterParam) {
-                case 'userRole': {
-                    filterObject.role = filters.userRole;
-
-                    // const rolesArr = filtres.userRole.split(';');
-                    // filterObject.role = { $in: rolesArr };
+                case 'model': {
+                    filterObject.model = { $regex: `^${filters.model}`, $options: 'gi' };
                     break;
                 }
-                case 'name': {
-                    filterObject.name = { $regex: `^${filters.name}`, $options: 'gi' };
+                case 'year.lte': {
+                    Object.assign(ageFilter, { $lte: filters['year.lte'] });
                     break;
                 }
-                case 'age.lte': {
-                    Object.assign(ageFilter, { $lte: +filters['age.lte'] });
-                    break;
-                }
-                case 'age.gte': {
-                    Object.assign(ageFilter, { $gte: +filters['age.gte'] });
+                case 'year.gte': {
+                    Object.assign(ageFilter, { $gte: filters['year.gte'] });
                     break;
                 }
                 default: {
@@ -43,10 +36,10 @@ module.exports = {
         });
 
         if (Object.keys(ageFilter).length) {
-            filterObject.age = ageFilter;
+            filterObject.year = ageFilter;
         }
 
-        const users = await USER
+        const users = await CAR
             .find(filterObject)
             .sort({ [sortBy]: orderBy })
             .limit(+perPage)

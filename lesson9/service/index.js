@@ -3,5 +3,6 @@ module.exports = {
     jwtService: require('./jwt.servise'),
     passwordService: require('./password.service'),
     s3Service: require('./s3.service'),
-    userService: require('./user.service')
+    userService: require('./user.service'),
+    carService: require('./car.servise')
 };
